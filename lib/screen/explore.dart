@@ -10,10 +10,8 @@ class ExplorePage extends StatefulWidget {
 class _ExplorePageState extends State<ExplorePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-    body: Container(
-      child: Text("explore"),
-    ),
-  );
+    return Container(
+      child: Center(child: Text("explore")),
+    );
   }
 }

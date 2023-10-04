@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'data.dart';
+import '../data.dart';
 import 'loginhome.dart';
 
 
@@ -25,29 +25,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //Tabbar info
-      bottomNavigationBar: BottomNavigationBar(
-          unselectedItemColor: Colors.grey,
-          iconSize: 30,
-          selectedItemColor: Colors.black,
-          selectedIconTheme: IconThemeData(
-            size: 35,
-            color: buttoncolor,
-          ),
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                ),
-                label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.search), label: "Explore"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.shopping_cart_outlined), label: "Cart"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.local_offer_sharp), label: "Offer"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person_rounded), label: "Account"),
-          ],
-          ),
+      
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
         decoration: BackTheme(),
