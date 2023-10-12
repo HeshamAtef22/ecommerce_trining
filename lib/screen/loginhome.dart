@@ -12,8 +12,6 @@ class LoginHome extends StatefulWidget {
   State<LoginHome> createState() => _LoginHomeState();
 }
 
-
-
 class _LoginHomeState extends State<LoginHome> {
   //هعمل متغير  خاص بالفورم علشان امرر منه الداتا للكاي وهيبقي من نفس النوع اللي بيحمله الكاي الخاص بالفورم
   GlobalKey<FormState> _keystat = GlobalKey();
@@ -21,12 +19,9 @@ class _LoginHomeState extends State<LoginHome> {
   //متغيرلاظهار الباسورد او اخفاءه
   bool _showpassword = true;
 
-
   //هعمل متغيرين احفظ فيهم الميل والباسورد
   String? email;
   String? password;
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -116,11 +111,12 @@ class _LoginHomeState extends State<LoginHome> {
                           decoration: InputDecoration(
                               //هعمل اظهار واخفائ للباسورد عند الضغط علي الايقون الخاصة باخفاء الباسورد
                               suffixIcon: IconButton(
-                                icon: _showpassword? Icon(Icons.visibility_off) :Icon(Icons.visibility) ,
+                                icon: _showpassword
+                                    ? Icon(Icons.visibility_off)
+                                    : Icon(Icons.visibility),
                                 onPressed: () {
                                   setState(() {
                                     _showpassword = !_showpassword;
-                                    
                                   });
                                 },
                               ),
@@ -137,26 +133,16 @@ class _LoginHomeState extends State<LoginHome> {
                         //MaterialButton for sign in
                         Padding(
                           padding: const EdgeInsets.only(top: 20, bottom: 15),
-                          child: MaterialButton(
-                            elevation: 10,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
+                          child: ElevatedButton(
                             onPressed: () {
                               //هعمل شرط لو شروط الفالديت الخاصة بالتيكست فيلد اتحققت  النافيجيتور يشتغل ويتم تسجيل الدخول
                               //غير كدا لا
                               if (_keystat.currentState!.validate()) {
                                 Navigator.of(context)
-                                    .popAndPushNamed("homepage");
+                                    .popAndPushNamed("homelayout");
                               }
                             },
-                            minWidth: double.maxFinite,
-                            height: 60,
-                            padding: const EdgeInsets.all(5),
-                            color: buttoncolor,
-                            child: const Text(
-                              "sign in",
-                              style: TextStyle(color: Colors.white),
-                            ),
+                            child: const Text("sign in"),
                           ),
                         ),
                       ],
@@ -189,7 +175,7 @@ class _LoginHomeState extends State<LoginHome> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     onPressed: () {},
-                    color: const Color.fromRGBO(235, 240, 255, 1),
+                    color: Color.fromARGB(255, 239, 239, 245),
                     child: Row(
                       children: [
                         Image.asset("assets/images/google.png", height: 25),
@@ -205,7 +191,7 @@ class _LoginHomeState extends State<LoginHome> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     onPressed: () {},
-                    color: const Color.fromRGBO(235, 240, 255, 1),
+                    color: Color.fromARGB(255, 239, 239, 245),
                     child: Row(
                       children: [
                         Icon(

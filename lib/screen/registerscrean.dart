@@ -115,8 +115,8 @@ class _RegisterState extends State<Register> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "الحقل فارغ";
-                        }else if(value!.length <=8){
-                           return "يجب ان لا تقل كلمة السر عن 8 احرف";
+                        } else if (value!.length <= 8) {
+                          return "يجب ان لا تقل كلمة السر عن 8 احرف";
                         }
                       },
                     ),
@@ -125,11 +125,11 @@ class _RegisterState extends State<Register> {
                       keyboardType: TextInputType.visiblePassword,
                       onSaved: (newValue) => curpassword = newValue,
                       obscureText: _showpassword,
-                      decoration:  InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: "Password again",
-                          prefixIcon: Icon(Icons.lock_outline),
-                          //هعمل اظهار واخفائ للباسورد عند الضغط علي الايقون الخاصة باخفاء الباسورد
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: "Password again",
+                        prefixIcon: Icon(Icons.lock_outline),
+                        //هعمل اظهار واخفائ للباسورد عند الضغط علي الايقون الخاصة باخفاء الباسورد
                         suffixIcon: IconButton(
                           icon: _showpassword
                               ? Icon(Icons.visibility_off)
@@ -140,7 +140,7 @@ class _RegisterState extends State<Register> {
                             });
                           },
                         ),
-                          ),
+                      ),
                       //onChanged هنا استخدمت
                       onChanged: (value) {
                         curpassword = value;
@@ -157,24 +157,14 @@ class _RegisterState extends State<Register> {
                   ],
                 )),
             SizedBox(height: 15),
-            MaterialButton(
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
+            ElevatedButton(
               onPressed: () {
                 if (!_keystat.currentState!.validate()) {
                 } else {
-                  Navigator.of(context).pushNamed("homepage");
+                  Navigator.of(context).pushNamed("homelayout");
                 }
               },
-              minWidth: 500,
-              height: 60,
-              padding: EdgeInsets.all(5),
-              color: buttoncolor,
-              child: Text(
-                "sign in",
-                style: TextStyle(color: Colors.white),
-              ),
+              child: Text("sign in"),
             ),
             SizedBox(height: 20),
             Row(
@@ -201,5 +191,3 @@ class _RegisterState extends State<Register> {
     ));
   }
 }
-
-

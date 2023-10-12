@@ -1,8 +1,8 @@
+import 'package:ecommerce_trining/screen/product_detail.dart';
 import 'package:flutter/material.dart';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import '../data.dart';
 import 'loginhome.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -10,6 +10,9 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
+//دا متغير بيتغير خاص بالسليد بتتغير قيمته مع قيمة الانديكس الخاصة بالليست
+int _currentindex = 0;
 
 class _HomePageState extends State<HomePage> {
   //هعمل ليست للداتا اللي في  ميجا سيل Mega Sale List
@@ -20,17 +23,16 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //Tabbar info
-      
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.only(top: 20, right: 20, left: 20),
         decoration: BackTheme(),
         child: ListView(
           children: [
+            //TextFormField for search box
             Container(
               child: Row(
                 children: [
@@ -68,171 +70,164 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            //Offer Banner
+            //Offer Banner slider
             Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 15),
-              child: Column(
-                children: [
-                  //1- هعمل كونتينر بالمساحة اللي عايزها علشان اعرض فيها الصور او مجموعة الويدجات اللي انا عايزها
-                  //2-هعمل ليست ماب بداخلها تفاصيل المنتجات علشان اعرضها
-                  Container(
-                    height: 180,
-                    child: PageView.builder(
-                        itemCount: offers.length,
-                        pageSnapping: true,
-                        itemBuilder: (context, i) {
-                          return offerstack(
-                            offers[i]["image"],
-                            offers[i]["title"],
-                            offers[i]["timer"],
-                          );
-                        }),
-                  )
-                ],
-              ),
-            ),
+                padding: const EdgeInsets.only(top: 15, bottom: 15),
+                child: CarouselSlider.builder(
+                  itemCount: offers.length,
+                  itemBuilder: (context, index, realIndex) {
+                    return offerstack(
+                      offers[index]["image"],
+                      offers[index]["title"],
+                      offers[index]["timer"],
+                    );
+                  },
+                  options: CarouselOptions(
+                      initialPage: 0,
+                      height: 200.0,
+                      //viewportFraction نسبة ظهور العنصر ع الشاشة
+                      viewportFraction: 1,
+                      //enlargeCenterPage تكبير الصورة اللي في المنتصف
+                      enlargeCenterPage: true,
+                      //autoPlay التحريك الاوتوامتيك
+                      autoPlay: true,
+                      //autoPlayInterval مدة التغير بين كل صورة واخري
+                      autoPlayInterval: Duration(seconds: 2),
+                      //enableInfiniteScroll دي بخلي السكرول ملوش اخر يعني زي نظام الدائرة
+                      //لو عملته فولس فاول ما يوصل لاخر انديكس هيرجع للانديكس الاول ويبدأاسكرول من الاول وهكذا
+                      enableInfiniteScroll: true,
+                      //scrollDirection اتجاه السكرول
+                      onPageChanged: (index, reason) {
+                        //همرر قيمة لانديكس للمتغير علشان كل ما يتغير الاندكس يتغير معه قيمة المتغير
+                        setState(() {
+                          _currentindex = index;
+                        });
+                      }),
+                )),
+            //slideChoosePoint
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                slideChoosePoint(Colors.black12),
-                SizedBox(width: 4),
-                slideChoosePoint(Colors.black12),
-                SizedBox(width: 4),
-                slideChoosePoint(buttoncolor),
-                SizedBox(width: 4),
-                slideChoosePoint(Colors.black12),
-                SizedBox(width: 4),
-                slideChoosePoint(Colors.black12),
+                slideChoosePoint(3),
+                slideChoosePoint(2),
+                slideChoosePoint(1),
+                slideChoosePoint(0),
               ],
             ),
+            SizedBox(height: 5),
             //Category list
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("Category",
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                    style: Theme.of(context).textTheme.headlineMedium),
                 Text("More Category",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: buttoncolor)),
+                    style: Theme.of(context).textTheme.headlineSmall),
               ],
             ),
-            SizedBox(height: 5),
+            SizedBox(height: 10),
             //Category List Product
-            Container(
-              height: 150,
-              child: ListView.builder(
+            SizedBox(
+              height: 125,
+              child: ListView.separated(
+                //الميثود اللي بتعمل لوب علشان تعمل فاصل ع حسب عدد العناصر ودي اجبارية
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                      width: MediaQuery.of(context).size.width * .02);
+                },
                 scrollDirection: Axis.horizontal,
                 itemCount: CategoryInfo.length,
+
                 itemBuilder: (context, i) {
-                  return Container(
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 90,
-                          width: 90,
-                          margin: EdgeInsets.only(right: 10),
-                          decoration: BoxDecoration(
-                              border: Border.all(width: 0.5),
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(100)),
-                          child: Image.asset(
-                            CategoryInfo[i]["icon"],
-                            height: 10,
-                            width: 10,
-                          ),
-                          padding: EdgeInsets.all(25),
-                        ),
-                        SizedBox(height: 6),
-                        SizedBox(
-                          width: 90,
-                          child: Text(
-                            CategoryInfo[i]["title"],
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[800]),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+                  return customCircularCategory(
+                      CategoryInfo[i]["icon"], CategoryInfo[i]["title"]);
                 },
               ),
             ),
+            //Flash Sale List
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Flash Sale",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 Text("See More",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: buttoncolor)),
+                    style: Theme.of(context).textTheme.headlineSmall),
               ],
             ),
-            //Flash Sale List
+            SizedBox(height: 5),
+            //ListView.separated استخدمتها هنا علشان اعمل فاصلبين العناصر عن طريق الميدياكويري
             SizedBox(
               height: 240,
-              child: ListView.builder(
+              child: ListView.separated(
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                      width: MediaQuery.of(context).size.width * .02);
+                },
                 scrollDirection: Axis.horizontal,
                 itemCount: flashsale.length,
                 itemBuilder: (context, i) {
-                  return Container(
-                    width: 140,
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            right: 10, left: 10, top: 15, bottom: 8),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 100,
-                                child: Image.asset(
-                                  flashsale[i]["image"],
-                                  fit: BoxFit.fill,
+                  return InkWell(
+                    child: Container(
+                      width: 140,
+                      child: Card(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              right: 10, left: 10, top: 15, bottom: 8),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 100,
+                                  child: Image.asset(
+                                    flashsale[i]["image"],
+                                    fit: BoxFit.fill,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                flashsale[i]["title"],
-                                style: TextStyle(fontSize: 12),
-                              ),
-                              Text(
-                                flashsale[i]["price"],
-                                textAlign: TextAlign.end,
-                                style: TextStyle(color: buttoncolor),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    flashsale[i]["oldprice"],
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 10,
-                                        decoration: TextDecoration.lineThrough),
-                                  ),
-                                  SizedBox(width: 7),
-                                  Text(
-                                    flashsale[i]["offer"],
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 12,
+                                Text(
+                                  flashsale[i]["title"],
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                Text(
+                                  flashsale[i]["price"],
+                                  textAlign: TextAlign.end,
+                                  style: TextStyle(color: buttoncolor),
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      flashsale[i]["oldprice"],
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 10,
+                                          decoration:
+                                              TextDecoration.lineThrough),
                                     ),
-                                  ),
-                                ],
-                              )
-                            ]),
+                                    SizedBox(width: 7),
+                                    Text(
+                                      flashsale[i]["offer"],
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ]),
+                        ),
                       ),
                     ),
+                    onTap: () {
+                      //عملت نافيجتور تنقلني لصفحة الديتيلز وعن طريق المتغير اللي اسمه داتا اللي في صفحة الديتيلز
+                      //همرر من خلاله الداتا اللي عايز اعرضها
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ProductDetail(data: flashsale[i]),
+                      ));
+                    },
                   );
                 },
               ),
@@ -246,20 +241,21 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text(
                     "Mega Sale",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                    style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   Text("See More",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: buttoncolor)),
+                      style: Theme.of(context).textTheme.headlineSmall),
                 ],
               ),
             ),
             //Mega Sale List
             SizedBox(
               height: 240,
-              child: ListView.builder(
+              child: ListView.separated(
+                separatorBuilder: (BuildContext context, int index) {
+                  return SizedBox(
+                      width: MediaQuery.of(context).size.width * .02);
+                },
                 scrollDirection: Axis.horizontal,
                 itemCount: megasale.length,
                 itemBuilder: (context, i) {
@@ -336,7 +332,7 @@ class _HomePageState extends State<HomePage> {
                       "Recomended \nProduct",
                       style: TextStyle(
                           color: Colors.white,
-                          fontSize: 25,
+                          fontSize: MediaQuery.of(context).size.width * .05,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -345,7 +341,10 @@ class _HomePageState extends State<HomePage> {
                     left: 10,
                     child: Text(
                       "We recommend the best for you",
-                      style: TextStyle(color: Colors.white, fontSize: 15),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: MediaQuery.of(context).size.width * .05,
+                      ),
                     ),
                   ),
                 ],
@@ -425,88 +424,18 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-//هعمل كلاس للسيرش ديلجيت علشان امرره في السيرش بوكس
-class CustomSearch extends SearchDelegate {
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    //buildActions دي ليست بتحتوي علي ويدجيت ودا نفس الاكشن الموجود في الاب بار
-    //فدا الاكشن او الجزئ الايمن من البوكس الخاص بالسيرش لما افتحه او اضغط عليه
-    return [Icon(Icons.close)];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    //buildLeading دا نفس الليدنج اللي موجود بالاب بار بس هنا هيكون للبوكس الخاص بالسيرش واللي بيكون من نوع ويدجيت
-    return IconButton(
-        onPressed: () {
-          //close فانكشن بيلد ان جاهز داخل السيرش ديليجيت ومهمته انه يقفل السيرش او يخرج منه
-          close(context, null);
-        },
-        icon: Icon(Icons.arrow_back));
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    //buildResults الخاصة بنتيجة البحث
-    return Text("Prodact");
-  }
-
-  //buildSuggestions الاقتراحات اللي بتكون مكتوبة تحت البوكس سيرش علشان تقترح علي اليوزر كلمات معينة تقدر تساعده في السيرش
-  //زي ما بتعمل سيرش في الفيس او تويتر او يوتيوب او غيره
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return Container(
-        child: ListView(children: [
-      ...List.generate(40, (index) {
-        return Text("product ${index}");
-      }),
-    ]));
-  }
-}
-
-//ميثود للستاك الخاص باسلايد اوفر علشان امرر من خلاله القيم اليي موجوده في الليست اللي فيها الداتا بتاعتي
-Widget offerstack(String image, String text, Row row) {
-  return ClipRRect(
-    borderRadius: BorderRadius.circular(10),
-    child: Stack(
-      alignment:
-          AlignmentDirectional.bottomCenter, //التصورات هى خطأ حيث يضيف شك
-      children: [
-        Image.asset(
-          image,
-          height: double.infinity,
-          width: double.infinity,
-          fit: BoxFit.cover, //fit : التصورات ينبغي أن تكون 100
-          //fit: BoxFit.fitWidth,
-        ),
-        Positioned(
-            top: 20,
-            left: 20,
-            width: 300,
-            child: Text(
-              text,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  backgroundColor: Colors.black26),
-            )),
-        row,
-      ],
-    ),
+//عملت كاستم ويدجيت للدوائر اللي تحت السليدر وهممر من خلالها الانديكس
+Container slideChoosePoint(int indexnum) {
+  return Container(
+    margin: EdgeInsets.symmetric(horizontal: 2),
+    //هتحكم في حجم الكونتينر عن طريق المتغير والانديكس بحيث ان لما المتغير يكون بيساوي الانديكس ياخد حجم معين
+    height: _currentindex == indexnum ? 15 : 10,
+    width: _currentindex == indexnum ? 15 : 10,
+    padding: EdgeInsets.all(5),
+    decoration: BoxDecoration(
+        border: Border.all(width: .3),
+        borderRadius: BorderRadius.circular(20),
+        color:
+            _currentindex == indexnum ? Colors.lightBlue : Colors.transparent),
   );
 }
-
-//ميثود خاصة بالدوائر الخاصة بالسلايد من الاسفل
-Widget slideChoosePoint(Color color) {
-  return ClipRRect(
-      borderRadius: BorderRadius.circular(100),
-      child: Container(
-        padding: EdgeInsets.only(right: 4),
-        height: 10,
-        width: 10,
-        color: color,
-      ));
-}
-
-

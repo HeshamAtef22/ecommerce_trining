@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../screen/cartpage.dart';
 import '../screen/explore.dart';
 import '../screen/homepage.dart';
+import '../screen/loginhome.dart';
 
 class HomeLayOut extends StatefulWidget {
   const HomeLayOut({super.key});
@@ -45,15 +46,15 @@ class _HomeLayOutState extends State<HomeLayOut> {
               icon: Icon(Icons.person_rounded), label: "Account"),
         ],
 
-        //selectedIconTheme: IconThemeData(size: 31, color: Colors.amber),
+        //some Option
+
+        selectedIconTheme: IconThemeData(size: 31, color: buttoncolor),
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         //value هو الانديكس اخاص بليست الايتم
         onTap: (value) {
           setState(() {
             currentIndex = value;
-            print(value);
-            print("currentindex = $currentIndex");
           });
         },
       ),
