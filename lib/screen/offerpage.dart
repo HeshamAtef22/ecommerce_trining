@@ -59,11 +59,11 @@ class _OfferPageState extends State<OfferPage> {
                         //عن طريق المديا كويري الكونتينر اخد طول الصفحة وقسمها علي عدد الانيدكس اللي عندي
                         height:
                             MediaQuery.of(context).size.height / offers.length,
-                        child: offerstack(
-                          offers[i]["image"],
-                          offers[i]["title"],
-                          offers[i]["timer"],
-                        ),
+                        child: OfferStackWidget(
+                      image: offers[i]["image"],
+                      text: offers[i]["title"],
+                      row: offers[i]["timer"],
+                    ),
                       );
                     },
 

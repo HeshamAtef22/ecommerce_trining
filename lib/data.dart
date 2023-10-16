@@ -53,6 +53,7 @@ Widget customCircularCategory(String ImageLink, String title) {
         width: 90,
         child: Text(
           title,
+          maxLines: 2,overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
           softWrap: true,
           style: TextStyle(
@@ -339,9 +340,15 @@ List offers = [
   }
 ];
 
-//ميثود للستاك الخاص باسلايد اوفر علشان امرر من خلاله القيم اليي موجوده في الليست اللي فيها الداتا بتاعتي
-Widget offerstack(String image, String text, Widget row) {
-  return Stack(
+
+
+
+class OfferStackWidget extends StatelessWidget {
+  const OfferStackWidget({super.key, required this.image, required this.text, required this.row});
+  final String image; final String text; final Widget row;
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
     alignment: AlignmentDirectional.bottomCenter,
     children: [
       Image.asset(
@@ -366,6 +373,7 @@ Widget offerstack(String image, String text, Widget row) {
       row,
     ],
   );
+  }
 }
 
 //الثيم الخاص بالخلفية

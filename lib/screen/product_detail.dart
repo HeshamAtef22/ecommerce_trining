@@ -23,7 +23,11 @@ class _ProductDetailState extends State<ProductDetail> {
       decoration: BackTheme(),
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.data["title"]),
+          title: Text(
+            widget.data["title"],
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           actions: [
             IconButton(onPressed: () {}, icon: Icon(Icons.search)),
             IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
@@ -64,6 +68,8 @@ class _ProductDetailState extends State<ProductDetail> {
                               width: MediaQuery.of(context).size.width * .75,
                               child: Text(
                                 widget.data["title"],
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style:
                                     Theme.of(context).textTheme.headlineLarge,
                               ),
@@ -200,7 +206,12 @@ class _ProductDetailState extends State<ProductDetail> {
                       ),
 
                       SizedBox(height: 10),
-                      appTextTheme(text: widget.data["info"]),
+                      Text(
+                        widget.data["info"],
+                        maxLines: 6,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.black54),
+                      ),
                     ],
                   ),
                 ),
@@ -286,9 +297,11 @@ class _ProductDetailState extends State<ProductDetail> {
 
                       //user Comment
                       SizedBox(height: 10),
-                      appTextTheme(
-                        text:
-                            "air max are always very comfortable fit, clean and just perfect in every way. just the box was too small and scrunched the sneakers up a little bit, not sure if the box was always this small but the 90s are and will always be one of my favorites.",
+                      Text(
+                        "air max are always very comfortable fit, clean and just perfect in every way. just the box was too small and scrunched the sneakers up a little bit, not sure if the box was always this small but the 90s are and will always be one of my favorites.",
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(color: Colors.black54),
                       ),
 
                       SizedBox(height: 8),

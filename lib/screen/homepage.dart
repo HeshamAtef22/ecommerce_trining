@@ -76,10 +76,10 @@ class _HomePageState extends State<HomePage> {
                 child: CarouselSlider.builder(
                   itemCount: offers.length,
                   itemBuilder: (context, index, realIndex) {
-                    return offerstack(
-                      offers[index]["image"],
-                      offers[index]["title"],
-                      offers[index]["timer"],
+                    return OfferStackWidget(
+                      image: offers[index]["image"],
+                      text: offers[index]["title"],
+                      row: offers[index]["timer"],
                     );
                   },
                   options: CarouselOptions(
@@ -188,6 +188,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Text(
                                   flashsale[i]["title"],
+                                  maxLines: 2,overflow: TextOverflow.ellipsis,
                                   style: TextStyle(fontSize: 12),
                                 ),
                                 Text(

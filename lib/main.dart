@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
 
-      initialRoute: "homelayout",
+      initialRoute: "cart",
       routes: {
         "splashscreen": (context) => SplashPage(),
         "loginhome": (context) => const LoginHome(),
