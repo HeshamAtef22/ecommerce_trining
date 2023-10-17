@@ -1,8 +1,8 @@
-import 'package:ecommerce_trining/screen/homepage.dart';
-import 'package:ecommerce_trining/screen/loginhome.dart';
+import 'package:ecommerce_trining/modules/home/homepage.dart';
+import 'package:ecommerce_trining/modules/login/loginhome.dart';
 import 'package:flutter/material.dart';
 
-import '../data.dart';
+import '../../data.dart';
 
 class ProductDetail extends StatefulWidget {
   final data;

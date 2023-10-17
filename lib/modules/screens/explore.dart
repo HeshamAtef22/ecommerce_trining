@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../data.dart';
-import 'loginhome.dart';
+import '../../data.dart';
+import '../login/loginhome.dart';
 
 class ExplorePage extends StatefulWidget {
   const ExplorePage({super.key});

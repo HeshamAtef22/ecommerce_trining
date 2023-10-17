@@ -1,8 +1,8 @@
-import 'package:ecommerce_trining/screen/product_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import '../data.dart';
-import 'loginhome.dart';
+import '../../data.dart';
+import '../login/loginhome.dart';
+import '../screens/product_detail.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

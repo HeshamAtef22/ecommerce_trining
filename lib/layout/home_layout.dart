@@ -1,11 +1,13 @@
-import 'package:ecommerce_trining/screen/accountpage.dart';
-import 'package:ecommerce_trining/screen/offerpage.dart';
+
 import 'package:flutter/material.dart';
 
-import '../screen/cartpage.dart';
-import '../screen/explore.dart';
-import '../screen/homepage.dart';
-import '../screen/loginhome.dart';
+
+import '../modules/home/homepage.dart';
+import '../modules/login/loginhome.dart';
+import '../modules/screens/accountpage.dart';
+import '../modules/screens/cartpage.dart';
+import '../modules/screens/explore.dart';
+import '../modules/screens/offerpage.dart';
 
 class HomeLayOut extends StatefulWidget {
   const HomeLayOut({super.key});

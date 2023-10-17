@@ -1,3 +1,4 @@
+import 'package:ecommerce_trining/shared/components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -23,50 +24,13 @@ class Tester extends StatelessWidget {
         appBar: AppBar(
           title: Text("Tester"),
         ),
-        body: Column(
-          children: [
-            Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 70,
-              child: Container(
-                color: Color(0xFFFFFFFF),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              height: 250,
-              child: Image.asset(
-                "assets/images/sunglass.jpg",
-                height: 250,
-                width: double.infinity,
-              ),
-            ),
-            SizedBox(
-              height: 40,
-              child: Container(
-                color: Color(0xFFFFFFFF),
-              ),
-            ),
-            Container(
-              width: double.infinity,
-              child: Text(
-                "You haven't anything to cart",
-                style: TextStyle(
-                  color: Color(0xFF67778E),
-                  fontFamily: 'Roboto-Light.ttf',
-                  fontSize: 20,
-                  fontStyle: FontStyle.normal,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            )
-          ],
-        ),
-      ),
-          ],
+        body: Center(
+          child: DefaultButton(
+            function: () {
+              print("press");
+            },
+            text: "text",
+          ),
         ),
       ),
     );

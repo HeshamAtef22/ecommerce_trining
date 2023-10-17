@@ -1,6 +1,7 @@
+import 'package:ecommerce_trining/shared/components/components.dart';
 import 'package:flutter/material.dart';
 
-import '../data.dart';
+import '../../data.dart';
 
 //botton color Default
 Color buttoncolor = const Color.fromRGBO(64, 191, 255, 1);
@@ -22,6 +23,10 @@ class _LoginHomeState extends State<LoginHome> {
   //هعمل متغيرين احفظ فيهم الميل والباسورد
   String? email;
   String? password;
+
+  //متغيرات لحفظ الداتا وعمل كونترول عليها داخل التيكست فيلد
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +69,7 @@ class _LoginHomeState extends State<LoginHome> {
                     style: TextStyle(color: Colors.blueGrey[600]),
                   ),
                   const SizedBox(height: 20),
+                  //E-mail and pass TextFormField
                   Form(
                     key: _keystat,
                     //autovalidateMode ضيفته في الفورم الاساسي علشان لو عندي اكتر من تيكستفيلد يعمل تشيك عليهم كلهم اوتوماتيك
@@ -75,75 +81,74 @@ class _LoginHomeState extends State<LoginHome> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           //Email TextFormField
-                          child: TextFormField(
-                            keyboardType: TextInputType.emailAddress,
-                            //onSaved هخزت او هسيف الميل داخل المتغير الللي عرفته
-                            onSaved: (newValue) => email = newValue,
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: "E-mail",
-                                hintText: "Your E-mail",
-                                prefixIcon: Icon(Icons.email_outlined)),
-
+                          child: defaultTextFormFiled(
+                            //controller لحفظ القيمة او الداتا داخل المتغير واقدر اكنترول عليها او استخدمها
+                            controller: emailController,
+                            keyboardtype: TextInputType.emailAddress,
                             //validator بيخزن التكست او الداتا اليي بيدخلها المستخدم في المتغير فاليو اللي هو المتغير الخاص بالفانكشن بتاعته
                             //ليه مزايا كتير منها انه لو المستخدم مدخلش داتا في البورد يقدر يظهرله رسالة ان الحقل فارغ
                             //او مثلا حددتله نوع داتا ودخل عكسها او عدد حروف اكبر هنا الفاليديتور بيظهر رسالة للمستخدم بالخطأ اللي بيعمله
                             //تابع الكود علشان تعرف الاستخدام
-                            validator: (value) {
+                            validate: (value) {
                               //هنا هبدأ اديله الاحتمالات بتاعتي والرسايل اللي هتظهر لليوزر
                               if (value!.isEmpty) {
-                                return "الحقل فارغ";
+                                return "email must not be empty";
                               } else if (!value.contains("@") ||
                                   !value.contains(".")) {
-                                return "اميل خاطئ  Example: *****@gamil.com";
+                                return "wrong email format. Example: mail@gamil.com";
                               }
+                              ;
                             },
+                            label: "E-mail",
+                            hint: "Your E-mail",
+                            prefix: Icons.email_outlined,
                           ),
                         ),
                         //Password TextFormField
-                        TextFormField(
-                          keyboardType: TextInputType.visiblePassword,
-                          //onSaved هعمل تخزين للباسورد داخل المتغير باسورد اللي عرفته
-                          onSaved: (newValue) => password = newValue,
-                          //obscureText لاخفاء الداتا المكتوبة زي الباسورد
-                          obscureText: _showpassword,
-
-                          decoration: InputDecoration(
-                              //هعمل اظهار واخفائ للباسورد عند الضغط علي الايقون الخاصة باخفاء الباسورد
-                              suffixIcon: IconButton(
-                                icon: _showpassword
-                                    ? Icon(Icons.visibility_off)
-                                    : Icon(Icons.visibility),
-                                onPressed: () {
-                                  setState(() {
-                                    _showpassword = !_showpassword;
-                                  });
-                                },
-                              ),
-                              border: OutlineInputBorder(),
-                              hintText: "Your Password",
-                              labelText: "Password",
-                              prefixIcon: Icon(Icons.lock)),
-                          validator: (value) {
+                        defaultTextFormFiled(
+                          controller: passwordController,
+                          keyboardtype: TextInputType.visiblePassword,
+                          validate: (value) {
                             if (value!.isEmpty) {
-                              return "الحقل فارغ";
+                              return "Password must not be empty";
+                            }else if (value.length < 8) {
+                              return "Password is too short";
                             }
                           },
+                          label: "Password",
+                          hint: "Your Password",
+                          prefix: Icons.lock,
+                          //obscureText لاخفاء الداتا المكتوبة زي الباسورد
+                          isPassword: _showpassword,
+                          //هعمل اظهار واخفائ للباسورد عند الضغط علي الايقون الخاصة باخفاء الباسورد
+                          suffixicon: IconButton(
+                            icon: _showpassword
+                                ? Icon(Icons.visibility_off)
+                                : Icon(Icons.visibility),
+                            onPressed: () {
+                              setState(() {
+                                _showpassword = !_showpassword;
+                              });
+                            },
+                          ),
                         ),
+
                         //MaterialButton for sign in
                         Padding(
                           padding: const EdgeInsets.only(top: 20, bottom: 15),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              //هعمل شرط لو شروط الفالديت الخاصة بالتيكست فيلد اتحققت  النافيجيتور يشتغل ويتم تسجيل الدخول
-                              //غير كدا لا
-                              if (_keystat.currentState!.validate()) {
-                                Navigator.of(context)
-                                    .popAndPushNamed("homelayout");
-                              }
-                            },
-                            child: const Text("sign in"),
-                          ),
+                          child: DefaultButton(
+                              function: () {
+                                {
+                                  //هعمل شرط لو شروط الفالديت الخاصة بالتيكست فيلد اتحققت  النافيجيتور يشتغل ويتم تسجيل الدخول
+                                  //غير كدا لا
+                                  if (_keystat.currentState!.validate()) {
+                                    Navigator.of(context)
+                                        .popAndPushNamed("homelayout");
+                                  }
+                                }
+                                ;
+                              },
+                              text: "login"),
                         ),
                       ],
                     ),

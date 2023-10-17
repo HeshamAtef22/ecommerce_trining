@@ -1,13 +1,14 @@
-import 'package:ecommerce_trining/screen/cartpage.dart';
-import 'package:ecommerce_trining/screen/product_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'layout/home_layout.dart';
-import 'screen/homepage.dart';
-import 'screen/loginhome.dart';
-import 'screen/registerscrean.dart';
-import 'screen/splashscreen.dart';
+import 'modules/home/homepage.dart';
+import 'modules/login/loginhome.dart';
+import 'modules/screens/cartpage.dart';
+import 'modules/screens/product_detail.dart';
+import 'modules/login/registerscrean.dart';
+import 'modules/screens/splashscreen.dart';
+import 'tester_code.dart';
 
 void main() {
   runApp(const MyApp());
@@ -80,7 +81,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
 
-      initialRoute: "cart",
+      initialRoute: "loginhome",
       routes: {
         "splashscreen": (context) => SplashPage(),
         "loginhome": (context) => const LoginHome(),
@@ -88,7 +89,8 @@ class MyApp extends StatelessWidget {
         "homepage": (context) => const HomePage(),
         "homelayout": (context) => const HomeLayOut(),
         "cart": (context) => const CartPage(),
-        "productdetail": (context) => const ProductDetail()
+        "productdetail": (context) => const ProductDetail(),
+        "tester": (context) =>  Tester(),
       },
       //home: LoginHome(),
     );

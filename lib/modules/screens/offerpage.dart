@@ -1,7 +1,7 @@
-import 'package:ecommerce_trining/screen/loginhome.dart';
+import 'package:ecommerce_trining/modules/login/loginhome.dart';
 import 'package:flutter/material.dart';
 
-import '../data.dart';
+import '../../data.dart';
 
 class OfferPage extends StatefulWidget {
   const OfferPage({super.key});
