@@ -41,7 +41,9 @@ class _ProductDetailState extends State<ProductDetail> {
                 Column(
                   children: [
                     //product image
-                    bannarImage(context, widget.data["image"]),
+                    Hero(
+                      tag: widget.data["title"],
+                        child: bannarImage(context, widget.data["image"],),),
 
                     SizedBox(height: 10),
                     //slider point

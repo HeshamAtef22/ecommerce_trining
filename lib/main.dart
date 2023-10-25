@@ -24,7 +24,6 @@ class MyApp extends StatelessWidget {
 
       //Theme App
       theme: ThemeData(
-        
         //textTheme
         textTheme: const TextTheme(
           //خاصة بالعناوين بحجم كبير
@@ -81,7 +80,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
 
-      initialRoute: "loginhome",
+      initialRoute: "homelayout",
       routes: {
         "splashscreen": (context) => SplashPage(),
         "loginhome": (context) => const LoginHome(),
@@ -90,7 +89,7 @@ class MyApp extends StatelessWidget {
         "homelayout": (context) => const HomeLayOut(),
         "cart": (context) => const CartPage(),
         "productdetail": (context) => const ProductDetail(),
-        "tester": (context) =>  Tester(),
+        "tester": (context) => Tester(),
       },
       //home: LoginHome(),
     );

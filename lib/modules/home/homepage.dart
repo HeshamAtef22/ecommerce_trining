@@ -32,44 +32,44 @@ class _HomePageState extends State<HomePage> {
         decoration: BackTheme(),
         child: ListView(
           children: [
-            //TextFormField for search box
-            Container(
-              child: Row(
-                children: [
-                  Expanded(
-                    //TextFormField for search box
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        //TextFormField box size
-                        contentPadding: EdgeInsets.symmetric(vertical: 14),
-                        prefixIcon: Icon(Icons.search, color: buttoncolor),
-                        border: OutlineInputBorder(),
-                        hintText: "Search Product",
+              //TextFormField for search box
+              Container(
+                child: Row(
+                  children: [
+                    Expanded(
+                      //TextFormField for search box
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          //TextFormField box size
+                          contentPadding: EdgeInsets.symmetric(vertical: 14),
+                          prefixIcon: Icon(Icons.search, color: buttoncolor),
+                          border: OutlineInputBorder(),
+                          hintText: "Search Product",
+                        ),
+                        //ظهور صفحة البحث عند الضغط علي التيكست فيلد
+                        onTap: () {
+                          showSearch(context: context, delegate: CustomSearch());
+                        },
                       ),
-                      //ظهور صفحة البحث عند الضغط علي التيكست فيلد
-                      onTap: () {
-                        showSearch(context: context, delegate: CustomSearch());
-                      },
                     ),
-                  ),
-                  //الايقون الجانبية  بجوار التيكست فيلد
-                  SizedBox(width: 5),
-                  Icon(Icons.favorite_border, size: 24),
-                  SizedBox(width: 5),
-                  Stack(alignment: Alignment.topRight, children: [
-                    Icon(Icons.notifications_none, size: 24),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.red,
-                      ),
-                      height: 12,
-                      width: 12,
-                    )
-                  ]),
-                ],
+                    //الايقون الجانبية  بجوار التيكست فيلد
+                    SizedBox(width: 5),
+                    Icon(Icons.favorite_border, size: 24),
+                    SizedBox(width: 5),
+                    Stack(alignment: Alignment.topRight, children: [
+                      Icon(Icons.notifications_none, size: 24),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.red,
+                        ),
+                        height: 12,
+                        width: 12,
+                      )
+                    ]),
+                  ],
+                ),
               ),
-            ),
             //Offer Banner slider
             Padding(
                 padding: const EdgeInsets.only(top: 15, bottom: 15),
@@ -144,6 +144,9 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+
+
+
             //Flash Sale List
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -168,57 +171,60 @@ class _HomePageState extends State<HomePage> {
                 scrollDirection: Axis.horizontal,
                 itemCount: flashsale.length,
                 itemBuilder: (context, i) {
-                  return InkWell(
-                    child: Container(
-                      width: 140,
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              right: 10, left: 10, top: 15, bottom: 8),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: 100,
-                                  child: Image.asset(
-                                    flashsale[i]["image"],
-                                    fit: BoxFit.fill,
+                  return GestureDetector(
+                    child: Hero(
+                      tag: flashsale[i]["title"],
+                      child: Container(
+                        width: 140,
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                right: 10, left: 10, top: 15, bottom: 8),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 100,
+                                    child: Image.asset(
+                                      flashsale[i]["image"],
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
-                                ),
-                                Text(
-                                  flashsale[i]["title"],
-                                  maxLines: 2,overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                                Text(
-                                  flashsale[i]["price"],
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(color: buttoncolor),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      flashsale[i]["oldprice"],
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 10,
-                                          decoration:
-                                              TextDecoration.lineThrough),
-                                    ),
-                                    SizedBox(width: 7),
-                                    Text(
-                                      flashsale[i]["offer"],
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 12,
+                                  Text(
+                                    flashsale[i]["title"],
+                                    maxLines: 2,overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  Text(
+                                    flashsale[i]["price"],
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(color: buttoncolor),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        flashsale[i]["oldprice"],
+                                        style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 10,
+                                            decoration:
+                                                TextDecoration.lineThrough),
                                       ),
-                                    ),
-                                  ],
-                                )
-                              ]),
+                                      SizedBox(width: 7),
+                                      Text(
+                                        flashsale[i]["offer"],
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ]),
+                          ),
                         ),
                       ),
                     ),
