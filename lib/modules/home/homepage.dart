@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../data.dart';
+import '../../shared/data/home_repository.dart';
 import '../login/loginhome.dart';
 import '../screens/product_detail.dart';
 
@@ -15,13 +16,7 @@ class HomePage extends StatefulWidget {
 int _currentindex = 0;
 
 class _HomePageState extends State<HomePage> {
-  //هعمل ليست للداتا اللي في  ميجا سيل Mega Sale List
-  late List megasale;
-  @override
-  void initState() {
-    megasale = flashsale.reversed.toList();
-    super.initState();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -71,39 +66,54 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             //Offer Banner slider
-            Padding(
-                padding: const EdgeInsets.only(top: 15, bottom: 15),
-                child: CarouselSlider.builder(
-                  itemCount: offers.length,
-                  itemBuilder: (context, index, realIndex) {
-                    return OfferStackWidget(
-                      image: offers[index]["image"],
-                      text: offers[index]["title"],
-                      row: offers[index]["timer"],
-                    );
-                  },
-                  options: CarouselOptions(
-                      initialPage: 0,
-                      height: 200.0,
-                      //viewportFraction نسبة ظهور العنصر ع الشاشة
-                      viewportFraction: 1,
-                      //enlargeCenterPage تكبير الصورة اللي في المنتصف
-                      enlargeCenterPage: true,
-                      //autoPlay التحريك الاوتوامتيك
-                      autoPlay: true,
-                      //autoPlayInterval مدة التغير بين كل صورة واخري
-                      autoPlayInterval: Duration(seconds: 2),
-                      //enableInfiniteScroll دي بخلي السكرول ملوش اخر يعني زي نظام الدائرة
-                      //لو عملته فولس فاول ما يوصل لاخر انديكس هيرجع للانديكس الاول ويبدأاسكرول من الاول وهكذا
-                      enableInfiniteScroll: true,
-                      //scrollDirection اتجاه السكرول
-                      onPageChanged: (index, reason) {
-                        //همرر قيمة لانديكس للمتغير علشان كل ما يتغير الاندكس يتغير معه قيمة المتغير
-                        setState(() {
-                          _currentindex = index;
-                        });
-                      }),
-                )),
+            FutureBuilder(
+            future: HomeRepository().getBannersData(),
+            builder: (context, snapshot) {
+              if(snapshot.hasError){
+                return Text("error");
+              }
+              if(snapshot.connectionState == ConnectionState.waiting){
+                return Center(child: CircularProgressIndicator());
+              }else{
+                final List offerdata = snapshot.data["data"];
+                return Padding(
+                    padding: const EdgeInsets.only(top: 15, bottom: 15),
+                    child: CarouselSlider.builder(
+                      itemCount: offers.length,
+                      itemBuilder: (context, index, realIndex) {
+                        return OfferStackWidget(
+                          image: offerdata[index]["image"],
+                          text: offers[index]["title"],
+                          row: offers[index]["timer"],
+                        );
+                      },
+                      options: CarouselOptions(
+                          initialPage: 0,
+                          height: 200.0,
+                          //viewportFraction نسبة ظهور العنصر ع الشاشة
+                          viewportFraction: 1,
+                          //enlargeCenterPage تكبير الصورة اللي في المنتصف
+                          enlargeCenterPage: true,
+                          //autoPlay التحريك الاوتوامتيك
+                          autoPlay: true,
+                          //autoPlayInterval مدة التغير بين كل صورة واخري
+                          autoPlayInterval: Duration(seconds: 2),
+                          //enableInfiniteScroll دي بخلي السكرول ملوش اخر يعني زي نظام الدائرة
+                          //لو عملته فولس فاول ما يوصل لاخر انديكس هيرجع للانديكس الاول ويبدأاسكرول من الاول وهكذا
+                          enableInfiniteScroll: true,
+                          //scrollDirection اتجاه السكرول
+                          onPageChanged: (index, reason) {
+                            //همرر قيمة لانديكس للمتغير علشان كل ما يتغير الاندكس يتغير معه قيمة المتغير
+                            setState(() {
+                              _currentindex = index;
+                            });
+                          }),
+                    ));
+              }
+              return Container();
+            }
+            ),
+
             //slideChoosePoint
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -126,24 +136,10 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             SizedBox(height: 10),
-            //Category List Product
-            SizedBox(
-              height: 125,
-              child: ListView.separated(
-                //الميثود اللي بتعمل لوب علشان تعمل فاصل ع حسب عدد العناصر ودي اجبارية
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(
-                      width: MediaQuery.of(context).size.width * .02);
-                },
-                scrollDirection: Axis.horizontal,
-                itemCount: CategoryInfo.length,
 
-                itemBuilder: (context, i) {
-                  return customCircularCategory(
-                      CategoryInfo[i]["icon"], CategoryInfo[i]["title"]);
-                },
-              ),
-            ),
+
+            //Category List Product
+            categoryListWidget(),
 
 
 
@@ -264,7 +260,7 @@ class _HomePageState extends State<HomePage> {
                       width: MediaQuery.of(context).size.width * .02);
                 },
                 scrollDirection: Axis.horizontal,
-                itemCount: megasale.length,
+                itemCount: flashsale.length,
                 itemBuilder: (context, i) {
                   return Container(
                     width: 140,
@@ -279,16 +275,16 @@ class _HomePageState extends State<HomePage> {
                               SizedBox(
                                 height: 100,
                                 child: Image.asset(
-                                  megasale[i]["image"],
+                                  flashsale[i]["image"],
                                   fit: BoxFit.fill,
                                 ),
                               ),
                               Text(
-                                megasale[i]["title"],
+                                flashsale[i]["title"],
                                 style: TextStyle(fontSize: 12),
                               ),
                               Text(
-                                megasale[i]["price"],
+                                flashsale[i]["price"],
                                 textAlign: TextAlign.end,
                                 style: TextStyle(color: buttoncolor),
                               ),
@@ -297,7 +293,7 @@ class _HomePageState extends State<HomePage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    megasale[i]["oldprice"],
+                                    flashsale[i]["oldprice"],
                                     style: TextStyle(
                                         color: Colors.grey,
                                         fontSize: 10,
@@ -305,7 +301,7 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   SizedBox(width: 7),
                                   Text(
-                                    megasale[i]["offer"],
+                                    flashsale[i]["offer"],
                                     style: TextStyle(
                                       color: Colors.red,
                                       fontSize: 12,
@@ -428,6 +424,43 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  //Category List widget Custom
+  FutureBuilder<dynamic> categoryListWidget() {
+    return FutureBuilder(
+              future: HomeRepository().getCategoriesData(),
+            builder: (context, snapshot) {
+                if(snapshot.connectionState == ConnectionState.waiting){
+                  return Center(child: CircularProgressIndicator());
+                }
+                if(snapshot.hasError){
+                  return Text("Error try again");
+                }
+                if(snapshot.hasData){
+                  final data = snapshot.data["data"]["data"] as List;
+                 // print(data);
+                  return SizedBox(
+                    height: 125,
+                    child: ListView.separated(
+                      //الميثود اللي بتعمل لوب علشان تعمل فاصل ع حسب عدد العناصر ودي اجبارية
+                      separatorBuilder: (BuildContext context, int index) {
+                        return SizedBox(
+                            width: MediaQuery.of(context).size.width * .02);
+                      },
+                      scrollDirection: Axis.horizontal,
+                      itemCount: data.length,
+
+                      itemBuilder: (context, index) {
+                        return customCircularCategory(
+                            ImageLink: data[index]["image"], title: data[index]["name"],);
+                      },
+                    ),
+                  );
+                }
+              return SizedBox();
+            }
+          );
   }
 }
 
