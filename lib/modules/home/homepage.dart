@@ -1,7 +1,9 @@
+import 'package:ecommerce_trining/repository/category_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../data.dart';
-import '../../shared/data/home_repository.dart';
+import '../../models/category_model.dart';
+import '../../repository/home_repository.dart';
 import '../login/loginhome.dart';
 import '../screens/product_detail.dart';
 
@@ -16,7 +18,15 @@ class HomePage extends StatefulWidget {
 int _currentindex = 0;
 
 class _HomePageState extends State<HomePage> {
+  late Future<dynamic> bannerData;
+  late Future<CategoryModel> categoriesData;
 
+  @override
+  void initState() {
+    bannerData = HomeRepository().getBannersData();
+    categoriesData = CategoriesRepository().getCategoriesData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,92 +37,93 @@ class _HomePageState extends State<HomePage> {
         decoration: BackTheme(),
         child: ListView(
           children: [
-              //TextFormField for search box
-              Container(
-                child: Row(
-                  children: [
-                    Expanded(
-                      //TextFormField for search box
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          //TextFormField box size
-                          contentPadding: EdgeInsets.symmetric(vertical: 14),
-                          prefixIcon: Icon(Icons.search, color: buttoncolor),
-                          border: OutlineInputBorder(),
-                          hintText: "Search Product",
-                        ),
-                        //ظهور صفحة البحث عند الضغط علي التيكست فيلد
-                        onTap: () {
-                          showSearch(context: context, delegate: CustomSearch());
-                        },
+            //TextFormField for search box
+            Container(
+              child: Row(
+                children: [
+                  Expanded(
+                    //TextFormField for search box
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        //TextFormField box size
+                        contentPadding: EdgeInsets.symmetric(vertical: 14),
+                        prefixIcon: Icon(Icons.search, color: buttoncolor),
+                        border: OutlineInputBorder(),
+                        hintText: "Search Product",
                       ),
+                      //ظهور صفحة البحث عند الضغط علي التيكست فيلد
+                      onTap: () {
+                        showSearch(context: context, delegate: CustomSearch());
+                      },
                     ),
-                    //الايقون الجانبية  بجوار التيكست فيلد
-                    SizedBox(width: 5),
-                    Icon(Icons.favorite_border, size: 24),
-                    SizedBox(width: 5),
-                    Stack(alignment: Alignment.topRight, children: [
-                      Icon(Icons.notifications_none, size: 24),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.red,
-                        ),
-                        height: 12,
-                        width: 12,
-                      )
-                    ]),
-                  ],
-                ),
+                  ),
+                  //الايقون الجانبية  بجوار التيكست فيلد
+                  SizedBox(width: 5),
+                  Icon(Icons.favorite_border, size: 24),
+                  SizedBox(width: 5),
+                  Stack(alignment: Alignment.topRight, children: [
+                    Icon(Icons.notifications_none, size: 24),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        color: Colors.red,
+                      ),
+                      height: 12,
+                      width: 12,
+                    )
+                  ]),
+                ],
               ),
+            ),
             //Offer Banner slider
             FutureBuilder(
-            future: HomeRepository().getBannersData(),
-            builder: (context, snapshot) {
-              if(snapshot.hasError){
-                return Text("error");
-              }
-              if(snapshot.connectionState == ConnectionState.waiting){
-                return Center(child: CircularProgressIndicator());
-              }else{
-                final List offerdata = snapshot.data["data"];
-                return Padding(
-                    padding: const EdgeInsets.only(top: 15, bottom: 15),
-                    child: CarouselSlider.builder(
-                      itemCount: offers.length,
-                      itemBuilder: (context, index, realIndex) {
-                        return OfferStackWidget(
-                          image: offerdata[index]["image"],
-                          text: offers[index]["title"],
-                          row: offers[index]["timer"],
-                        );
-                      },
-                      options: CarouselOptions(
-                          initialPage: 0,
-                          height: 200.0,
-                          //viewportFraction نسبة ظهور العنصر ع الشاشة
-                          viewportFraction: 1,
-                          //enlargeCenterPage تكبير الصورة اللي في المنتصف
-                          enlargeCenterPage: true,
-                          //autoPlay التحريك الاوتوامتيك
-                          autoPlay: true,
-                          //autoPlayInterval مدة التغير بين كل صورة واخري
-                          autoPlayInterval: Duration(seconds: 2),
-                          //enableInfiniteScroll دي بخلي السكرول ملوش اخر يعني زي نظام الدائرة
-                          //لو عملته فولس فاول ما يوصل لاخر انديكس هيرجع للانديكس الاول ويبدأاسكرول من الاول وهكذا
-                          enableInfiniteScroll: true,
-                          //scrollDirection اتجاه السكرول
-                          onPageChanged: (index, reason) {
-                            //همرر قيمة لانديكس للمتغير علشان كل ما يتغير الاندكس يتغير معه قيمة المتغير
-                            setState(() {
-                              _currentindex = index;
-                            });
-                          }),
-                    ));
-              }
-              return Container();
-            }
-            ),
+                future: bannerData,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  if (snapshot.hasError) {
+                    return Text("error");
+                  }
+
+                  if (snapshot.hasData) {
+                    final List offerdata = snapshot.data["data"];
+                    return Padding(
+                        padding: const EdgeInsets.only(top: 15, bottom: 15),
+                        child: CarouselSlider.builder(
+                          itemCount: offers.length,
+                          itemBuilder: (context, index, realIndex) {
+                            return OfferStackWidget(
+                              image: offerdata[index]["image"],
+                              text: offers[index]["title"],
+                              row: offers[index]["timer"],
+                            );
+                          },
+                          options: CarouselOptions(
+                              initialPage: 0,
+                              height: 200.0,
+                              //viewportFraction نسبة ظهور العنصر ع الشاشة
+                              viewportFraction: 1,
+                              //enlargeCenterPage تكبير الصورة اللي في المنتصف
+                              enlargeCenterPage: true,
+                              //autoPlay التحريك الاوتوامتيك
+                              autoPlay: true,
+                              //autoPlayInterval مدة التغير بين كل صورة واخري
+                              autoPlayInterval: Duration(seconds: 2),
+                              //enableInfiniteScroll دي بخلي السكرول ملوش اخر يعني زي نظام الدائرة
+                              //لو عملته فولس فاول ما يوصل لاخر انديكس هيرجع للانديكس الاول ويبدأاسكرول من الاول وهكذا
+                              enableInfiniteScroll: true,
+                              //scrollDirection اتجاه السكرول
+                              onPageChanged: (index, reason) {
+                                //همرر قيمة لانديكس للمتغير علشان كل ما يتغير الاندكس يتغير معه قيمة المتغير
+                                setState(() {
+                                  _currentindex = index;
+                                });
+                              }),
+                        ));
+                  }
+                  return SizedBox();
+                }),
 
             //slideChoosePoint
             Row(
@@ -137,11 +148,8 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 10),
 
-
             //Category List Product
             categoryListWidget(),
-
-
 
             //Flash Sale List
             Row(
@@ -177,7 +185,8 @@ class _HomePageState extends State<HomePage> {
                             padding: const EdgeInsets.only(
                                 right: 10, left: 10, top: 15, bottom: 8),
                             child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   SizedBox(
@@ -189,7 +198,8 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   Text(
                                     flashsale[i]["title"],
-                                    maxLines: 2,overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(fontSize: 12),
                                   ),
                                   Text(
@@ -427,40 +437,40 @@ class _HomePageState extends State<HomePage> {
   }
 
   //Category List widget Custom
-  FutureBuilder<dynamic> categoryListWidget() {
-    return FutureBuilder(
-              future: HomeRepository().getCategoriesData(),
-            builder: (context, snapshot) {
-                if(snapshot.connectionState == ConnectionState.waiting){
-                  return Center(child: CircularProgressIndicator());
-                }
-                if(snapshot.hasError){
-                  return Text("Error try again");
-                }
-                if(snapshot.hasData){
-                  final data = snapshot.data["data"]["data"] as List;
-                 // print(data);
+  FutureBuilder categoryListWidget() {
+    return FutureBuilder<CategoryModel>(
+        future: categoriesData,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Text("Error try again");
+          }
+          if (snapshot.hasData) {
+            final data = snapshot.data!.data;
+            return SizedBox(
+              height: 125,
+              child: ListView.separated(
+                //الميثود اللي بتعمل لوب علشان تعمل فاصل ع حسب عدد العناصر وsدي اجبارية
+                separatorBuilder: (BuildContext context, int index) {
                   return SizedBox(
-                    height: 125,
-                    child: ListView.separated(
-                      //الميثود اللي بتعمل لوب علشان تعمل فاصل ع حسب عدد العناصر ودي اجبارية
-                      separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                            width: MediaQuery.of(context).size.width * .02);
-                      },
-                      scrollDirection: Axis.horizontal,
-                      itemCount: data.length,
+                      width: MediaQuery.of(context).size.width * .02);
+                },
+                scrollDirection: Axis.horizontal,
+                itemCount: data.data.length,
 
-                      itemBuilder: (context, index) {
-                        return customCircularCategory(
-                            ImageLink: data[index]["image"], title: data[index]["name"],);
-                      },
-                    ),
+                itemBuilder: (context, index) {
+                  return customCircularCategory(
+                    ImageLink: data.data[index].image,
+                    title: data.data[index].name,
                   );
-                }
-              return SizedBox();
-            }
-          );
+                },
+              ),
+            );
+          }
+          return SizedBox();
+        });
   }
 }
 
