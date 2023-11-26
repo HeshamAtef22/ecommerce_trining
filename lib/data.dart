@@ -29,8 +29,52 @@ List CategoryInfo = [
   },
 ];
 
+class customCircularCategory extends StatelessWidget {
+  String ImageLink;
+  String title;
+   customCircularCategory({Key? key,required this.title,required this.ImageLink}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+   return Column(
+     children: [
+       Container(
+         height: 70,
+         width: 70,
+         margin: EdgeInsets.only(right: 10),
+         decoration: BoxDecoration(
+             image: DecorationImage(
+               image: NetworkImage(ImageLink),
+             ),
+             border: Border.all(width: 0.8),
+             color: const Color.fromARGB(50, 234, 224, 224),
+             borderRadius: BorderRadius.circular(100)),
+
+         padding: EdgeInsets.all(15),
+       ),
+       SizedBox(height: 6),
+       SizedBox(
+         width: 90,
+         child: Text(
+           title,
+           maxLines: 2,overflow: TextOverflow.ellipsis,
+           textAlign: TextAlign.center,
+           softWrap: true,
+           style: TextStyle(
+             fontSize: 12,
+             fontWeight: FontWeight.bold,
+             color: Colors.grey.shade700,
+           ),
+         ),
+       ),
+     ],
+   );
+  }
+
+}
+
 //custom circular Category
-Widget customCircularCategory(String ImageLink, String title) {
+/*Widget customCircularCategory(String ImageLink, String title) {
   return Column(
     children: [
       Container(
@@ -38,14 +82,13 @@ Widget customCircularCategory(String ImageLink, String title) {
         width: 70,
         margin: EdgeInsets.only(right: 10),
         decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(ImageLink),
+          ),
             border: Border.all(width: 0.8),
             color: const Color.fromARGB(50, 234, 224, 224),
             borderRadius: BorderRadius.circular(100)),
-        child: Image.asset(
-          ImageLink,
-          height: 15,
-          width: 15,
-        ),
+
         padding: EdgeInsets.all(15),
       ),
       SizedBox(height: 6),
@@ -65,7 +108,7 @@ Widget customCircularCategory(String ImageLink, String title) {
       ),
     ],
   );
-}
+}*/
 
 //list flash Sale data
 List flashsale = [
@@ -351,7 +394,7 @@ class OfferStackWidget extends StatelessWidget {
     return Stack(
     alignment: AlignmentDirectional.bottomCenter,
     children: [
-      Image.asset(
+      Image.network(
         image,
         height: double.infinity,
         width: double.infinity,

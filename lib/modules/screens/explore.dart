@@ -77,8 +77,9 @@ class _ExplorePageState extends State<ExplorePage> {
               itemCount: Fashion[0]["man"].length,
               itemBuilder: (context, index) {
                 //باستخدام الكاستم ويدجيت اللي عملتها هممر الداتا اللي داخل الليست فاشون
-                return customCircularCategory(Fashion[0]["man"][index]["icon"],
-                    Fashion[0]["man"][index]["title"]);
+               return customCircularCategory(title: Fashion[0]["man"][index]["title"], ImageLink: Fashion[0]["man"][index]["icon"]);
+                /*return customCircularCategory(Fashion[0]["man"][index]["icon"],
+                    Fashion[0]["man"][index]["title"]);*/
               },
             ),
             SizedBox(height: 16),
@@ -100,9 +101,10 @@ class _ExplorePageState extends State<ExplorePage> {
               itemCount: Fashion[0]["woman"].length,
               itemBuilder: (context, index) {
                 //باستخدام الكاستم ويدجيت اللي عملتها هممر الداتا اللي داخل الليست فاشون
-                return customCircularCategory(
+                return customCircularCategory(title: Fashion[0]["woman"][index]["title"], ImageLink: Fashion[0]["woman"][index]["icon"]);
+                /*return customCircularCategory(
                     Fashion[0]["woman"][index]["icon"],
-                    Fashion[0]["woman"][index]["title"]);
+                    Fashion[0]["woman"][index]["title"]);*/
               },
             ),
           ],

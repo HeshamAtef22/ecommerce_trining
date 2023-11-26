@@ -2,9 +2,9 @@ import 'package:ecommerce_trining/shared/components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void main(List<String> args) {
+/*void main(List<String> args) {
   runApp(Tester());
-}
+}*/
 
 class Tester extends StatelessWidget {
   const Tester({super.key});
