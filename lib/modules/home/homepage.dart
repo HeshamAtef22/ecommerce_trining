@@ -1,4 +1,7 @@
+import 'package:ecommerce_trining/models/flashsale_and_banner_model.dart';
+import 'package:ecommerce_trining/modules/screens/categoris_screen.dart';
 import 'package:ecommerce_trining/repository/category_repository.dart';
+import 'package:ecommerce_trining/repository/product_Repository.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import '../../data.dart';
@@ -19,13 +22,17 @@ class HomePage extends StatefulWidget {
 int _currentindex = 0;
 
 class _HomePageState extends State<HomePage> {
-  late Future<dynamic> bannerData;
+  late Future<FlashSaleAndBannersModel> bannerData;
   late Future<CategoryModel> categoriesData;
+  late Future<FlashSaleAndBannersModel> flashsleData;
+  late Future<FlashSaleAndBannersModel> productDara;
 
   @override
   void initState() {
     bannerData = HomeRepository().getBannersData();
     categoriesData = CategoriesRepository().getCategoriesData();
+    flashsleData = HomeRepository().getFlashSaleData();
+    productDara = ProductRepository().getProductData();
     super.initState();
   }
 
@@ -39,106 +46,11 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           children: [
             //TextFormField for search box
-            Container(
-              child: Row(
-                children: [
-                  Expanded(
-                    //TextFormField for search box
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        //TextFormField box size
-                        contentPadding: EdgeInsets.symmetric(vertical: 14),
-                        prefixIcon: Icon(Icons.search, color: buttoncolor),
-                        border: OutlineInputBorder(),
-                        hintText: "Search Product",
-                      ),
-                      //ظهور صفحة البحث عند الضغط علي التيكست فيلد
-                      onTap: () {
-                        showSearch(context: context, delegate: CustomSearch());
-                      },
-                    ),
-                  ),
-                  //الايقون الجانبية  بجوار التيكست فيلد
-                  SizedBox(width: 5),
-                  Icon(Icons.favorite_border, size: 24),
-                  SizedBox(width: 5),
-                  Stack(alignment: Alignment.topRight, children: [
-                    Icon(Icons.notifications_none, size: 24),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: Colors.red,
-                      ),
-                      height: 12,
-                      width: 12,
-                    )
-                  ]),
-                ],
-              ),
-            ),
+            SectionSearchBox(),
             //Offer Banner slider
-            FutureBuilder(
-                future: bannerData,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return SizedBox(
-                      height: 200.0,
-                      child: Shimmer.fromColors(
-                        baseColor: Colors.grey.shade300,
-                        highlightColor: Colors.red.shade300,
-                        child: Container(
-                          height: 100,
-                          width: 100,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    );;
-                  }
-                  if (snapshot.hasError) {
-                    return Text("error");
-                  }
-
-                  if (snapshot.hasData) {
-                    final List offerdata = snapshot.data["data"];
-                    return Padding(
-                        padding: const EdgeInsets.only(top: 15, bottom: 15),
-                        child: CarouselSlider.builder(
-                          itemCount: offers.length,
-                          itemBuilder: (context, index, realIndex) {
-                            return OfferStackWidget(
-                              image: offerdata[index]["image"],
-                              text: offers[index]["title"],
-                              row: offers[index]["timer"],
-                            );
-                          },
-                          options: CarouselOptions(
-                              initialPage: 0,
-                              height: 200.0,
-                              //viewportFraction نسبة ظهور العنصر ع الشاشة
-                              viewportFraction: 1,
-                              //enlargeCenterPage تكبير الصورة اللي في المنتصف
-                              enlargeCenterPage: true,
-                              //autoPlay التحريك الاوتوامتيك
-                              autoPlay: true,
-                              //autoPlayInterval مدة التغير بين كل صورة واخري
-                              autoPlayInterval: Duration(seconds: 2),
-                              //enableInfiniteScroll دي بخلي السكرول ملوش اخر يعني زي نظام الدائرة
-                              //لو عملته فولس فاول ما يوصل لاخر انديكس هيرجع للانديكس الاول ويبدأاسكرول من الاول وهكذا
-                              enableInfiniteScroll: true,
-                              //scrollDirection اتجاه السكرول
-                              onPageChanged: (index, reason) {
-                                //همرر قيمة لانديكس للمتغير علشان كل ما يتغير الاندكس يتغير معه قيمة المتغير
-                                setState(() {
-                                  _currentindex = index;
-                                });
-                              }),
-                        ));
-                  }
-                  return SizedBox();
-                }),
-
+            SectionBanner(),
             //slideChoosePoint
-            Row(
+            /*Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 slideChoosePoint(3),
@@ -146,7 +58,7 @@ class _HomePageState extends State<HomePage> {
                 slideChoosePoint(1),
                 slideChoosePoint(0),
               ],
-            ),
+            ),*/
             SizedBox(height: 5),
             //Category list
             Row(
@@ -159,9 +71,8 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             SizedBox(height: 10),
-
             //Category List Product
-            categoryListWidget(),
+            SectioncategoryListWidget(),
 
             //Flash Sale List
             Row(
@@ -177,86 +88,7 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: 5),
             //ListView.separated استخدمتها هنا علشان اعمل فاصلبين العناصر عن طريق الميدياكويري
-            SizedBox(
-              height: 240,
-              child: ListView.separated(
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(
-                      width: MediaQuery.of(context).size.width * .02);
-                },
-                scrollDirection: Axis.horizontal,
-                itemCount: flashsale.length,
-                itemBuilder: (context, i) {
-                  return GestureDetector(
-                    child: Hero(
-                      tag: flashsale[i]["title"],
-                      child: Container(
-                        width: 140,
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                right: 10, left: 10, top: 15, bottom: 8),
-                            child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    height: 100,
-                                    child: Image.asset(
-                                      flashsale[i]["image"],
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                  Text(
-                                    flashsale[i]["title"],
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                  Text(
-                                    flashsale[i]["price"],
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(color: buttoncolor),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        flashsale[i]["oldprice"],
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 10,
-                                            decoration:
-                                                TextDecoration.lineThrough),
-                                      ),
-                                      SizedBox(width: 7),
-                                      Text(
-                                        flashsale[i]["offer"],
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ]),
-                          ),
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      //عملت نافيجتور تنقلني لصفحة الديتيلز وعن طريق المتغير اللي اسمه داتا اللي في صفحة الديتيلز
-                      //همرر من خلاله الداتا اللي عايز اعرضها
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ProductDetail(data: flashsale[i]),
-                      ));
-                    },
-                  );
-                },
-              ),
-            ),
+            SectionFlashSale(flashsleData: flashsleData),
 
             //text Mega Sale
             Padding(
@@ -274,70 +106,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             //Mega Sale List
-            SizedBox(
-              height: 240,
-              child: ListView.separated(
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(
-                      width: MediaQuery.of(context).size.width * .02);
-                },
-                scrollDirection: Axis.horizontal,
-                itemCount: flashsale.length,
-                itemBuilder: (context, i) {
-                  return Container(
-                    width: 140,
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            right: 10, left: 10, top: 15, bottom: 8),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                height: 100,
-                                child: Image.asset(
-                                  flashsale[i]["image"],
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                              Text(
-                                flashsale[i]["title"],
-                                style: TextStyle(fontSize: 12),
-                              ),
-                              Text(
-                                flashsale[i]["price"],
-                                textAlign: TextAlign.end,
-                                style: TextStyle(color: buttoncolor),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    flashsale[i]["oldprice"],
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 10,
-                                        decoration: TextDecoration.lineThrough),
-                                  ),
-                                  SizedBox(width: 7),
-                                  Text(
-                                    flashsale[i]["offer"],
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ]),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            SectionFlashSale(flashsleData: flashsleData),
+
             //Image Product
             Padding(
               padding: EdgeInsets.only(top: 5, bottom: 5),
@@ -375,81 +145,102 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+
             //list of product
-            GridView.builder(
-              //physics وقفت السكرول الخاص بالجريد فيو لاني بستخدم بالفعل سكرول للصفحة بالليست فيو
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: flashsale.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                //mainAxisExtent علشان ازود مساحة البوكس اللي هيظهر فيه العناصر
-                crossAxisCount: 2,
-                mainAxisExtent: 240,
-              ),
-              itemBuilder: (context, i) {
-                return Container(
-                  width: 140,
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          right: 10, left: 10, top: 15, bottom: 8),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 100,
-                              width: 150,
-                              child: Image.asset(
-                                flashsale[i]["image"],
-                                height: 100,
-                                width: 150,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            Text(
-                              flashsale[i]["title"],
-                              style: TextStyle(fontSize: 12),
-                            ),
-                            Text(
-                              flashsale[i]["price"],
-                              textAlign: TextAlign.end,
-                              style: TextStyle(color: buttoncolor),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  flashsale[i]["oldprice"],
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 10,
-                                      decoration: TextDecoration.lineThrough),
-                                ),
-                                SizedBox(width: 7),
-                                Text(
-                                  flashsale[i]["offer"],
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            )
-                          ]),
-                    ),
-                  ),
-                );
-              },
-            )
+            SectionProductList(productDara: productDara),
           ],
         ),
       ),
     );
   }
 
+  FutureBuilder<FlashSaleAndBannersModel> SectionBanner() {
+    return FutureBuilder(
+              future: bannerData,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SizedBox(
+                    height: 200.0,
+                    child: Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey,
+                      child: Container(
+                        height: 100,
+                        width: 100,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  );;
+                }
+                if (snapshot.hasError) {
+                  return Text("error");
+                }
+
+                if (snapshot.hasData) {
+                  final List  banndata = snapshot.data!.data.banners;
+                  return Padding(
+                      padding: const EdgeInsets.only(top: 15, bottom: 15),
+                      child: Column(
+                        children: [
+                          CarouselSlider.builder(
+                            itemCount: banndata.length,
+                            itemBuilder: (context, index, realIndex) {
+                              return OfferStackWidget(
+                                image: banndata[index].image,
+
+                              );
+                            },
+                            options: CarouselOptions(
+                                initialPage: 0,
+                                height: 200.0,
+                                //viewportFraction نسبة ظهور العنصر ع الشاشة
+                                viewportFraction: 1,
+                                //enlargeCenterPage تكبير الصورة اللي في المنتصف
+                                enlargeCenterPage: true,
+                                //autoPlay التحريك الاوتوامتيك
+                                autoPlay: true,
+                                //autoPlayInterval مدة التغير بين كل صورة واخري
+                                autoPlayInterval: Duration(seconds: 2),
+                                //enableInfiniteScroll دي بخلي السكرول ملوش اخر يعني زي نظام الدائرة
+                                //لو عملته فولس فاول ما يوصل لاخر انديكس هيرجع للانديكس الاول ويبدأاسكرول من الاول وهكذا
+                                enableInfiniteScroll: true,
+                                //scrollDirection اتجاه السكرول
+                                onPageChanged: (index, reason) {
+                                  //همرر قيمة لانديكس للمتغير علشان كل ما يتغير الاندكس يتغير معه قيمة المتغير
+                                  setState(() {
+                                    _currentindex = index;
+                                  });
+                                }),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ...List.generate(banndata.length, (index) {
+                                return Container(
+                                  width: 15.0,
+                                  height: 15.0,
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 2.0),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: _currentindex == index
+                                        ? Color.fromRGBO(0, 250, 0, 50)
+                                        : Color.fromRGBO(0, 0, 0, 0.2),
+                                  ),
+                                );
+
+                              })
+                            ],
+                          ),
+                        ],
+                      ));
+                }
+                return SizedBox();
+              });
+  }
+
   //Category List widget Custom
-  FutureBuilder categoryListWidget() {
+  FutureBuilder SectioncategoryListWidget() {
     return FutureBuilder<CategoryModel>(
         future: categoriesData,
         builder: (context, snapshot) {
@@ -458,7 +249,7 @@ class _HomePageState extends State<HomePage> {
               height: 100.0,
               child: Shimmer.fromColors(
                 baseColor: Colors.grey.shade300,
-                highlightColor: Colors.red.shade300,
+                highlightColor: Colors.grey,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                     separatorBuilder: (context, index) => SizedBox(
@@ -476,7 +267,7 @@ class _HomePageState extends State<HomePage> {
             return Text("Error try again");
           }
           if (snapshot.hasData) {
-            final data = snapshot.data!.data;
+            final catdata = snapshot.data!.data;
             return SizedBox(
               height: 125,
               child: ListView.separated(
@@ -486,12 +277,21 @@ class _HomePageState extends State<HomePage> {
                       width: MediaQuery.of(context).size.width * .02);
                 },
                 scrollDirection: Axis.horizontal,
-                itemCount: data.data.length,
+                itemCount: catdata.data.length,
 
                 itemBuilder: (context, index) {
-                  return customCircularCategory(
-                    ImageLink: data.data[index].image,
-                    title: data.data[index].name,
+                  return GestureDetector(
+                    child: customCircularCategory(
+                      ImageLink: catdata.data[index].image,
+                      title: catdata.data[index].name,
+                    ),
+                    onTap:  () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => CategoriesScreen(
+                            CategoryID: catdata.data[index].id,
+                            CategoryName: catdata.data[index].name,
+                          )));
+                    },
                   );
                 },
               ),
@@ -499,6 +299,289 @@ class _HomePageState extends State<HomePage> {
           }
           return SizedBox();
         });
+  }
+}
+
+class SectionProductList extends StatelessWidget {
+  const SectionProductList({
+    super.key,
+    required this.productDara,
+  });
+
+  final Future<FlashSaleAndBannersModel> productDara;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: productDara,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Shimmer.fromColors(
+            baseColor: Colors.grey.shade300,
+            highlightColor: Colors.grey,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: 10,
+              itemBuilder: (context, i) {
+                return Container(
+                  margin: EdgeInsets.only(bottom: 10),
+                  height: 140,
+                  width: 100,
+                  color:  Colors.grey,
+                );
+              }
+            )
+          );
+        }
+        if (snapshot.hasError) {
+          return Center(
+            child: Text("Error"),
+          );
+        }
+        if (snapshot.hasData) {
+          var ProdData = snapshot.data!.data.products;
+          return GridView.builder(
+            //physics وقفت السكرول الخاص بالجريد فيو لاني بستخدم بالفعل سكرول للصفحة بالليست فيو
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: ProdData.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //mainAxisExtent علشان ازود مساحة البوكس اللي هيظهر فيه العناصر
+              crossAxisCount: 2,
+              mainAxisExtent: 240,
+            ),
+            itemBuilder: (context, i) {
+              return Container(
+                width: 140,
+                child: Card(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        right: 10, left: 10, top: 15, bottom: 8),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: 100,
+                            width: 150,
+                            child: Image.network(
+                              ProdData[i].image,
+                              height: 100,
+                              width: 150,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                          Text(
+                            ProdData[i].name,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          Text(
+                            "${ProdData[i].price} \$",
+                            textAlign: TextAlign.end,
+                            style: TextStyle(color: buttoncolor),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                          "${ProdData[i].oldPrice} \$",
+                                style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 10,
+                                    decoration: TextDecoration.lineThrough),
+                              ),
+                              SizedBox(width: 7),
+                              Text(
+                                "${ProdData[i].discount} \$",
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          )
+                        ]),
+                  ),
+                ),
+              );
+            },
+          );
+        }
+        return Container();
+      }
+    );
+  }
+}
+
+class SectionFlashSale extends StatelessWidget {
+  const SectionFlashSale({
+    super.key,
+    required this.flashsleData,
+  });
+
+  final Future<FlashSaleAndBannersModel> flashsleData;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: flashsleData,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SizedBox(
+            height: 100.0,
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                separatorBuilder: (context, index) => SizedBox(
+                  width: MediaQuery.of(context).size.width * .02,
+                ),
+                itemCount: 10,
+                itemBuilder: (context, index) => Container(
+                  height: 120,
+                  width: 100,
+                  color: Colors.grey.shade50,
+                )
+              ),
+            ),
+          );
+        }
+        if (snapshot.hasError) {
+          return Text("error");
+        }
+        if (snapshot.hasData) {
+          final List flashdata = snapshot.data!.data.products;
+          return SizedBox(
+            height: 240,
+            child: ListView.separated(
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(
+                    width: MediaQuery.of(context).size.width * .02);
+              },
+              scrollDirection: Axis.horizontal,
+              itemCount: flashdata.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  child: Container(
+                    width: 140,
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                            right: 10, left: 10, top: 15, bottom: 8),
+                        child: Column(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 100,
+                                child: Image.network(
+                                  flashdata[index].image,
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              Text(
+                                flashdata[index].name,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(fontSize: 12),
+                              ),
+                              Text(
+                                  "${flashdata[index].price}",
+                                textAlign: TextAlign.end,
+                                style: TextStyle(color: buttoncolor),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "${flashdata[index].oldPrice}",
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 10,
+                                        decoration:
+                                        TextDecoration.lineThrough),
+                                  ),
+                                  SizedBox(width: 7),
+                                  Text(
+                                    "${flashdata[index].discount}",
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ]),
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    //عملت نافيجتور تنقلني لصفحة الديتيلز وعن طريق المتغير اللي اسمه داتا اللي في صفحة الديتيلز
+                    //همرر من خلاله الداتا اللي عايز اعرضها
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ProductDetail(id: flashdata[index].id,title: flashdata[index].name,),
+                    ));
+                  },
+                );
+              },
+            ),
+          );
+        }
+        return SizedBox();
+      }
+    );
+  }
+}
+
+class SectionSearchBox extends StatelessWidget {
+  const SectionSearchBox({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: [
+          Expanded(
+            //TextFormField for search box
+            child: TextFormField(
+              decoration: InputDecoration(
+                //TextFormField box size
+                contentPadding: EdgeInsets.symmetric(vertical: 14),
+                prefixIcon: Icon(Icons.search, color: buttoncolor),
+                border: OutlineInputBorder(),
+                hintText: "Search Product",
+              ),
+              //ظهور صفحة البحث عند الضغط علي التيكست فيلد
+              onTap: () {
+                showSearch(context: context, delegate: CustomSearch());
+              },
+            ),
+          ),
+          //الايقون الجانبية  بجوار التيكست فيلد
+          SizedBox(width: 5),
+          Icon(Icons.favorite_border, size: 24),
+          SizedBox(width: 5),
+          Stack(alignment: Alignment.topRight, children: [
+            Icon(Icons.notifications_none, size: 24),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: Colors.red,
+              ),
+              height: 12,
+              width: 12,
+            )
+          ]),
+        ],
+      ),
+    );
   }
 }
 
