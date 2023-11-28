@@ -45,6 +45,7 @@ class customCircularCategory extends StatelessWidget {
          decoration: BoxDecoration(
              image: DecorationImage(
                image: NetworkImage(ImageLink),
+               fit: BoxFit.cover
              ),
              border: Border.all(width: 0.8),
              color: const Color.fromARGB(50, 234, 224, 224),

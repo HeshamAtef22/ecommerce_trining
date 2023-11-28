@@ -6,6 +6,7 @@ import '../../models/category_model.dart';
 import '../../repository/home_repository.dart';
 import '../login/loginhome.dart';
 import '../screens/product_detail.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -80,7 +81,18 @@ class _HomePageState extends State<HomePage> {
                 future: bannerData,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return SizedBox(
+                      height: 200.0,
+                      child: Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.red.shade300,
+                        child: Container(
+                          height: 100,
+                          width: 100,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    );;
                   }
                   if (snapshot.hasError) {
                     return Text("error");
@@ -442,7 +454,23 @@ class _HomePageState extends State<HomePage> {
         future: categoriesData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return SizedBox(
+              height: 100.0,
+              child: Shimmer.fromColors(
+                baseColor: Colors.grey.shade300,
+                highlightColor: Colors.red.shade300,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                    separatorBuilder: (context, index) => SizedBox(
+                      width: MediaQuery.of(context).size.width * .02,
+                    ),
+                    itemCount: 10,
+                  itemBuilder: (context, index) => CircleAvatar(
+                    radius: 30,
+                  ),
+                ),
+              ),
+            );;
           }
           if (snapshot.hasError) {
             return Text("Error try again");
