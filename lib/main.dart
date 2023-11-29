@@ -1,3 +1,4 @@
+import 'package:ecommerce_trining/modules/screens/categoris_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -88,8 +89,9 @@ class MyApp extends StatelessWidget {
         "homepage": (context) => const HomePage(),
         "homelayout": (context) => const HomeLayOut(),
         "cart": (context) => const CartPage(),
-        "productdetail": (context) => const ProductDetail(),
+        //"productdetail": (context) =>  ProductDetail(),
         "tester": (context) => Tester(),
+        "categoryscreen": (context) => CategoriesScreen()
       },
       //home: LoginHome(),
     );

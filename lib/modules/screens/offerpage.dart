@@ -61,8 +61,6 @@ class _OfferPageState extends State<OfferPage> {
                             MediaQuery.of(context).size.height / offers.length,
                         child: OfferStackWidget(
                       image: offers[i]["image"],
-                      text: offers[i]["title"],
-                      row: offers[i]["timer"],
                     ),
                       );
                     },

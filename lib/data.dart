@@ -45,6 +45,7 @@ class customCircularCategory extends StatelessWidget {
          decoration: BoxDecoration(
              image: DecorationImage(
                image: NetworkImage(ImageLink),
+               fit: BoxFit.cover
              ),
              border: Border.all(width: 0.8),
              color: const Color.fromARGB(50, 234, 224, 224),
@@ -387,35 +388,17 @@ List offers = [
 
 
 class OfferStackWidget extends StatelessWidget {
-  const OfferStackWidget({super.key, required this.image, required this.text, required this.row});
-  final String image; final String text; final Widget row;
+  const OfferStackWidget({super.key, required this.image});
+  final String image;
   @override
   Widget build(BuildContext context) {
-    return Stack(
-    alignment: AlignmentDirectional.bottomCenter,
-    children: [
-      Image.network(
-        image,
-        height: double.infinity,
-        width: double.infinity,
-        fit: BoxFit.cover, //fit : التصورات ينبغي أن تكون 100
-        //fit: BoxFit.fill,
-      ),
-      Positioned(
-          top: 20,
-          left: 20,
-          width: 300,
-          child: Text(
-            text,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                backgroundColor: Colors.black26),
-          )),
-      row,
-    ],
-  );
+    return Image.network(
+      image,
+      height: double.infinity,
+      width: double.infinity,
+      fit: BoxFit.fill, //fit : التصورات ينبغي أن تكون 100
+      //fit: BoxFit.fill,
+    );
   }
 }
 
@@ -466,7 +449,7 @@ Container bannarImage(BuildContext context,String imageText) {
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(10),
       image: DecorationImage(
-        image: AssetImage(
+        image: NetworkImage(
           imageText,
         ),
         fit: BoxFit.fill,
