@@ -459,6 +459,7 @@ Container bannarImage(BuildContext context,String imageText) {
   );
 }
 
+
 //هعمل كلاس للسيرش ديلجيت علشان امرره في السيرش بوكس
 class CustomSearch extends SearchDelegate {
 
