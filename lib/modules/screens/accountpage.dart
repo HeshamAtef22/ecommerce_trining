@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../data.dart';
 
-class AccountPage extends StatefulWidget {
+class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
 
-  @override
-  State<AccountPage> createState() => _AccountPageState();
-}
-
-class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return Container(

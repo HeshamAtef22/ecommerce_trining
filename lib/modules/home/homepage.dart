@@ -39,10 +39,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.only(top: 20, right: 20, left: 20),
-        decoration: BackTheme(),
+        //decoration: BackTheme(),
         child: ListView(
           children: [
             //TextFormField for search box
@@ -551,7 +552,10 @@ class SectionSearchBox extends StatelessWidget {
           Expanded(
             //TextFormField for search box
             child: TextFormField(
+
               decoration: InputDecoration(
+                fillColor: Colors.transparent,
+                filled: true,
                 //TextFormField box size
                 contentPadding: EdgeInsets.symmetric(vertical: 14),
                 prefixIcon: Icon(Icons.search, color: buttoncolor),
