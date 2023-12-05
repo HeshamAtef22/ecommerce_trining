@@ -1,5 +1,6 @@
 //ليست للداتا داخل الكاتيجوري
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 List CategoryInfo = [
@@ -458,8 +459,11 @@ Container bannarImage(BuildContext context,String imageText) {
   );
 }
 
+
 //هعمل كلاس للسيرش ديلجيت علشان امرره في السيرش بوكس
 class CustomSearch extends SearchDelegate {
+
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     //buildActions دي ليست بتحتوي علي ويدجيت ودا نفس الاكشن الموجود في الاب بار
@@ -488,12 +492,12 @@ class CustomSearch extends SearchDelegate {
   //زي ما بتعمل سيرش في الفيس او تويتر او يوتيوب او غيره
   @override
   Widget buildSuggestions(BuildContext context) {
-    return Container(
-        child: ListView(children: [
-      ...List.generate(40, (index) {
-        return Text("product ${index}");
-      }),
-    ]));
+    return Center(
+      child: Container(
+        color: Colors.white,
+        child: Lottie.asset("assets/animations/Animation - 1701258782468.json"),
+      ),
+    );
   }
 }
 

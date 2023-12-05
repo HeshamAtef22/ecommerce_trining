@@ -28,7 +28,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.only(top: 20, right: 20, left: 20),
-      decoration: BackTheme(),
+      color: Colors.white,
+      //decoration: BackTheme(),
       child: Scaffold(
         appBar:  AppBar(
           title: Text(widget.CategoryName!),

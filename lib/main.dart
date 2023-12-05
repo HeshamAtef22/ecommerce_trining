@@ -62,11 +62,11 @@ class MyApp extends StatelessWidget {
               )),
         ),
 
-        scaffoldBackgroundColor: Colors.transparent,
+        scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
           toolbarHeight: 90,
           //white appbar and black text to app theme
-          backgroundColor: Color.fromARGB(0, 182, 143, 143),
+          backgroundColor: Colors.white,
           titleTextStyle: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
 
           //statusBarColor شريط الحالة الخاص بالهاتف
           systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Color.fromARGB(0, 0, 0, 0),
+            statusBarColor: Colors.transparent,
           ),
         ),
       ),

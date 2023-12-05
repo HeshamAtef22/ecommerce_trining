@@ -36,7 +36,7 @@ class _ExplorePageState extends State<ExplorePage> {
                       ),
                       //ظهور صفحة البحث عند الضغط علي التيكست فيلد
                       onTap: () {
-                        showSearch(context: context, delegate: CustomSearch());
+                        //showSearch(context: context, delegate: CustomSearch());
                       },
                     ),
                   ),
