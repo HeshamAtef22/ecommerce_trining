@@ -12,7 +12,9 @@ class CartPage extends StatefulWidget {
   @override
   State<CartPage> createState() => _CartPageState();
 }
-
+/*
+استخدم انيميشن  لوتي واعمل كونديشن لو الكارت فاضي اظهر الانيميشن غي كدا اظهر الايتم
+* */
 class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
