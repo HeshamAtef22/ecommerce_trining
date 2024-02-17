@@ -13,6 +13,8 @@ class ProductRepository {
     return ProductData;
   }
 
+
+
   Future<ProductInfoModel> getProductItemInfo(int id) async {
     Response response = await Dio().get(
         'https://student.valuxapps.com/api/products/$id');

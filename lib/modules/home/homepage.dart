@@ -155,6 +155,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+
   FutureBuilder<FlashSaleAndBannersModel> SectionBanner() {
     return FutureBuilder(
               future: bannerData,
