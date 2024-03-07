@@ -223,7 +223,7 @@ class _LoginHomeState extends State<LoginHome> {
                         ),
                         onPressed: () async {
                           final UserCredential userCredential =
-                              await BlocProvider.of<AppCubit>(context).signInWithGoogle();
+                              await BlocProvider.of<AppCubit>(context).signInWithFacebook();
                           if (userCredential.user != null) {
                             Navigator.pushReplacement(
                                 context,
