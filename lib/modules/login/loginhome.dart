@@ -1,5 +1,12 @@
+import 'package:ecommerce_trining/cubit/cubit_app.dart';
+import 'package:ecommerce_trining/cubit/cubit_states.dart';
+import 'package:ecommerce_trining/modules/home/homepage.dart';
 import 'package:ecommerce_trining/shared/components/components.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ecommerce_trining/my_import.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 import '../../data.dart';
 
@@ -35,28 +42,29 @@ class _LoginHomeState extends State<LoginHome> {
       body: Container(
         decoration: BackTheme(),
         //باستخدام الميديا كويري هخلي الكونتينر ياخد طول  وعرض الجهاز بالكامل
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
+        height: context.height,
+        width: context.width,
 
         child: ListView(
           children: [
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 16),
+              margin: EdgeInsets.symmetric(horizontal: context.width * 0.05),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   //logo image
                   Padding(
-                    padding: const EdgeInsets.only(top: 80),
+                    padding: EdgeInsets.only(top: context.height * 0.1),
                     child: Image.asset(
                       "assets/images/logo.png",
-                      width: 72,
-                      height: 72,
+                      width: context.width * 0.5,
+                      height: context.height * 0.1,
                     ),
                   ),
                   //Text at the bottom of the logo
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(vertical: context.height * 0.01),
                     child: Text(
                       "Wellcome To mega",
                       style:
@@ -68,7 +76,7 @@ class _LoginHomeState extends State<LoginHome> {
                     "Sign in to continue",
                     style: TextStyle(color: Colors.blueGrey[600]),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: context.height * 0.05),
                   //E-mail and pass TextFormField
                   Form(
                     key: _keystat,
@@ -79,7 +87,8 @@ class _LoginHomeState extends State<LoginHome> {
                       children: [
                         //E-mail TextFormField
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
+                          padding:
+                              EdgeInsets.only(bottom: context.height * 0.01),
                           //Email TextFormField
                           child: defaultTextFormFiled(
                             //controller لحفظ القيمة او الداتا داخل المتغير واقدر اكنترول عليها او استخدمها
@@ -111,7 +120,7 @@ class _LoginHomeState extends State<LoginHome> {
                           validate: (value) {
                             if (value!.isEmpty) {
                               return "Password must not be empty";
-                            }else if (value.length < 8) {
+                            } else if (value.length < 8) {
                               return "Password is too short";
                             }
                           },
@@ -135,7 +144,9 @@ class _LoginHomeState extends State<LoginHome> {
 
                         //MaterialButton for sign in
                         Padding(
-                          padding: const EdgeInsets.only(top: 20, bottom: 15),
+                          padding: EdgeInsets.only(
+                              top: context.height * 0.02,
+                              bottom: context.height * 0.02),
                           child: DefaultButton(
                               function: () {
                                 {
@@ -155,7 +166,7 @@ class _LoginHomeState extends State<LoginHome> {
                   ),
 
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 10),
+                    padding: EdgeInsets.only(bottom: context.height * 0.02),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -175,44 +186,72 @@ class _LoginHomeState extends State<LoginHome> {
                       ],
                     ),
                   ),
-                  //login Button Google and Facebook
-                  MaterialButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    onPressed: () {},
-                    color: Color.fromARGB(255, 239, 239, 245),
+                  //login with Google button
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      elevation: 5,
+                    ),
+                    onPressed: () async {
+                      final UserCredential userCredential =
+                      await BlocProvider.of<AppCubit>(context).signInWithGoogle();
+                      if (userCredential.user != null) {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => HomePage(),
+                            ));
+                      }
+                    },
                     child: Row(
                       children: [
-                        Image.asset("assets/images/google.png", height: 25),
-                        const SizedBox(width: 60, height: 70),
+                        Image.asset("assets/images/google.png",
+                            height: context.height * 0.03),
+                        Spacer(),
                         const Text("Login With Google",
                             style: TextStyle(color: Colors.black54)),
+                        Spacer(),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: context.height * 0.01),
+                  //login with facebook button
+                   ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          elevation: 5,
+                        ),
+                        onPressed: () async {
+                          final UserCredential userCredential =
+                              await BlocProvider.of<AppCubit>(context).signInWithGoogle();
+                          if (userCredential.user != null) {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(),
+                                ));
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.facebook,
+                              size: context.height * 0.04,
+                            ),
+                            Spacer(),
+                            const Text(
+                              "Login With Facebook",
+                              style: TextStyle(color: Colors.black54),
+                            ),
+                            Spacer(),
+                          ],
+                        ),
+                      ),
 
-                  MaterialButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    onPressed: () {},
-                    color: Color.fromARGB(255, 239, 239, 245),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.facebook,
-                          size: 30,
-                        ),
-                        const SizedBox(width: 60, height: 70),
-                        const Text(
-                          "Login With Facebook",
-                          style: TextStyle(color: Colors.black54),
-                        ),
-                      ],
-                    ),
-                  ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 30, bottom: 15),
+                    padding: EdgeInsets.only(
+                        top: context.height * 0.03,
+                        bottom: context.height * 0.03),
                     child: InkWell(
                       onTap: () {},
                       child: const Text(

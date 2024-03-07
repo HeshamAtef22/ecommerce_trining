@@ -1,5 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:ecommerce_trining/logic/cart_cubit/cart_cubit.dart';
+import 'package:ecommerce_trining/cubit/cart_cubit/cart_cubit.dart';
 import 'package:ecommerce_trining/models/categories_product_model.dart';
 import 'package:ecommerce_trining/models/flashsale_and_banner_model.dart';
 import 'package:ecommerce_trining/models/product_info_model.dart';

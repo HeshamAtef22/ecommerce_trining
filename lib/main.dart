@@ -1,9 +1,12 @@
-import 'package:ecommerce_trining/logic/cart_cubit/cart_cubit.dart';
+import 'package:ecommerce_trining/cubit/cart_cubit/cart_cubit.dart';
+import 'package:ecommerce_trining/cubit/cubit_app.dart';
+import 'package:ecommerce_trining/firebase_options.dart';
 import 'package:ecommerce_trining/modules/screens/categoris_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:ecommerce_trining/my_import.dart';
 import 'layout/home_layout.dart';
 import 'modules/home/homepage.dart';
 import 'modules/login/loginhome.dart';
@@ -13,7 +16,11 @@ import 'modules/login/registerscrean.dart';
 import 'modules/screens/splashscreen.dart';
 import 'tester_code.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -26,6 +33,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => CartCubit(),
+        ),
+        BlocProvider(
+          create: (context) => AppCubit(),
         ),
       ],
       child: MaterialApp(
@@ -89,17 +99,9 @@ class MyApp extends StatelessWidget {
           ),
         ),
 
-        initialRoute: "homelayout",
+        initialRoute: ScreenPaths.loginhome,
         routes: {
-          "splashscreen": (context) => SplashPage(),
-          "loginhome": (context) => const LoginHome(),
-          "register": (context) => const Register(),
-          "homepage": (context) => const HomePage(),
-          "homelayout": (context) => const HomeLayOut(),
-          "cart": (context) => const CartPage(),
-          //"productdetail": (context) =>  ProductDetail(),
-          "tester": (context) => Tester(),
-          "categoryscreen": (context) => CategoriesScreen()
+          ScreenPaths.loginhome: (context) => LoginHome(),
         },
         //home: LoginHome(),
       ),
