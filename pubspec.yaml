@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.6.5
   easy_splash_screen: ^1.0.4
-  shared_preferences: ^2.2.1
+  shared_preferences: ^2.2.2
   carousel_slider: ^4.2.1
   flutter_launcher_icons: ^0.13.1
   dio: ^5.3.4

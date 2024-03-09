@@ -1,5 +1,6 @@
 import 'package:ecommerce_trining/cubit/cubit_app.dart';
 import 'package:ecommerce_trining/cubit/cubit_states.dart';
+import 'package:ecommerce_trining/layout/home_layout.dart';
 import 'package:ecommerce_trining/modules/home/homepage.dart';
 import 'package:ecommerce_trining/shared/components/components.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -199,7 +200,7 @@ class _LoginHomeState extends State<LoginHome> {
                         Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => HomePage(),
+                              builder: (context) => HomeLayOut(),
                             ));
                       }
                     },
@@ -228,7 +229,7 @@ class _LoginHomeState extends State<LoginHome> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => HomePage(),
+                                  builder: (context) => HomeLayOut(),
                                 ));
                           }
                         },
@@ -247,7 +248,7 @@ class _LoginHomeState extends State<LoginHome> {
                           ],
                         ),
                       ),
-
+                   //forgot password
                   Padding(
                     padding: EdgeInsets.only(
                         top: context.height * 0.03,
@@ -270,10 +271,14 @@ class _LoginHomeState extends State<LoginHome> {
                         "Don't have a account?  ",
                         style: TextStyle(color: Colors.black54),
                       ),
-                      //Navigator to register screan
+                      //Navigator to Register screan
                       InkWell(
                         onTap: () {
-                          Navigator.of(context).popAndPushNamed("register");
+                          Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(
+                              builder: (context) => Register(),
+                            )
+                          );
                         },
                         child: const Text(
                           "Register",

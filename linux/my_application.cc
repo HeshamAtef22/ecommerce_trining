@@ -57,7 +57,7 @@ static void my_application_activate(GApplication* application) {
   gtk_widget_show(GTK_WIDGET(view));
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(view));
 
-  fl_register_plugins(FL_PLUGIN_REGISTRY(view));
+  fl_Register_plugins(FL_PLUGIN_REGISTRY(view));
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
 }
@@ -69,8 +69,8 @@ static gboolean my_application_local_command_line(GApplication* application, gch
   self->dart_entrypoint_arguments = g_strdupv(*arguments + 1);
 
   g_autoptr(GError) error = nullptr;
-  if (!g_application_register(application, nullptr, &error)) {
-     g_warning("Failed to register: %s", error->message);
+  if (!g_application_Register(application, nullptr, &error)) {
+     g_warning("Failed to Register: %s", error->message);
      *exit_status = 1;
      return TRUE;
   }

@@ -1,7 +1,7 @@
 class ScreenPaths{
   static String splashscreen = "splashscreen";
   static String loginhome = "loginhome";
-  static String register = "register";
+  static String Register = "Register";
   static String homepage = "homepage";
   static String homelayout = "homelayout";
   static String cartpage = "cartpage";

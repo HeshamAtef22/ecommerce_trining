@@ -12,7 +12,6 @@ import 'modules/home/homepage.dart';
 import 'modules/login/loginhome.dart';
 import 'modules/screens/cartpage.dart';
 import 'modules/screens/product_detail.dart';
-import 'modules/login/registerscrean.dart';
 import 'modules/screens/splashscreen.dart';
 import 'tester_code.dart';
 
@@ -79,6 +78,7 @@ class MyApp extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 )),
           ),
+          primaryColor: const Color.fromRGBO(64, 191, 255, 1),
 
           scaffoldBackgroundColor: Colors.white,
           appBarTheme: const AppBarTheme(
