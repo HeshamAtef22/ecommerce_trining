@@ -62,7 +62,7 @@ class _RegisterState extends State<Register> {
                       style: TextStyle(color: Colors.blueGrey[600]),
                     ),
                   ),
-                  //textfield for register info
+                  //textfield for Register info
                   Form(
                       key: _keystat,
                       child: Column(

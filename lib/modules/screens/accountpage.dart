@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:ecommerce_trining/my_import.dart';
 import '../../data.dart';
 
 class AccountPage extends StatelessWidget {
@@ -17,11 +17,29 @@ class AccountPage extends StatelessWidget {
         body: Column(
           children: [
             //profile Botton
-            customOutLineBotton(
-                context, Icon(Icons.person_2_outlined), "Profile"),
-            customOutLineBotton(context, Icon(Icons.badge), "Order"),
-            customOutLineBotton(context, Icon(Icons.location_on), "Address"),
-            customOutLineBotton(context, Icon(Icons.credit_card), "Payment"),
+            CustomOutLineBotton(
+              icon: Icon(Icons.person_2_outlined),
+              text: "Profile",
+              onPressed: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfileScreen())),
+            ),
+            //Order Botton
+            CustomOutLineBotton(
+              icon: Icon(Icons.badge),
+              text: "Order",
+              onPressed: () {},
+            ),
+            //Address Botton
+            CustomOutLineBotton(
+                icon: Icon(Icons.location_on),
+                text: "Address",
+                onPressed: () {},
+            ),
+            //Payment Botton
+            CustomOutLineBotton(
+                icon: Icon(Icons.credit_card),
+                text:"Payment",
+                onPressed: () {},
+            ),
           ],
         ),
       ),
